@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+    <link rel="stylesheet" type="text/css" href="listaa.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="logocss.css" media="screen" />
+    
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img src="logo.png" alt="Logo"> <!-- Substitua 'sua-imagem.png' pelo caminho da sua imagem -->
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="menu">
+            <a href="file:///C:/Users/Matheus%20Pinheiro/Desktop/ud/index.html">Home</a>
+            <a href="file:///C:/Users/Matheus%20Pinheiro/Desktop/ud/ENTRADA/index.html">Entrada</a>
+            <a href="file:///C:/Users/Matheus%20Pinheiro/Desktop/ud/SAIDA/index.html">Saída</a>
+            <a href="file:///C:/Users/Matheus%20Pinheiro/Desktop/ud/LISTAGEM/index.html">Listagem</a>
+            <a href="file:///C:/Users/Matheus%20Pinheiro/Desktop/ud/MAPEAMENTO/index.html">Mapeamento</a>
+        </div>
+    </nav>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector('nav .menu');
+            menu.classList.toggle('active');
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    <div class="filter-container">
+        <label for="filterInput">Filtrar produtos: </label>
+        <input type="text" id="filterInput" placeholder="Digite para filtrar..." onkeyup="filtrarProdutos()">
+    </div>
+    
+    <h2>Lista de Produtos</h2>
+    <table id="tabelaProdutos">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Produto</th>
+                <th>Cor</th>
+                <th>Espessura</th>
+                <th>Peso</th>
+                <th>SKU</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="corpoTabela">
+            <!-- Dados serão carregados aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        // Função para carregar os produtos da localStorage e exibi-los na tabela
+        function carregarProdutos() {
+            const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+            const corpoTabela = document.getElementById('corpoTabela');
+            corpoTabela.innerHTML = '';
+
+            produtos.forEach(produto => {
+                const linha = document.createElement('tr');
+                linha.innerHTML = `
+                    <td>${produto.codigo}</td>
+                    <td>${produto.produto}</td>
+                    <td>${produto.cor}</td>
+                    <td>${produto.espessura}</td>
+                    <td>${produto.peso}</td>
+                    <td>${produto.sku}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editarProduto('${produto.sku}')">Editar</button>
+                        <button onclick="confirmarExclusao('${produto.sku}')">Excluir</button>
+                    </td>
+                `;
+                corpoTabela.appendChild(linha);
+            });
+        }
+
+        // Função para excluir um produto após confirmação
+        function confirmarExclusao(sku) {
+            const confirmacao = confirm('Tem certeza que deseja excluir este produto?');
+            if (confirmacao) {
+                excluirProduto(sku);
+            }
+        }
+
+        // Função para excluir um produto
+        function excluirProduto(sku) {
+            let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+            produtos = produtos.filter(produto => produto.sku !== sku);
+            localStorage.setItem('produtos', JSON.stringify(produtos));
+            carregarProdutos(); // Atualiza a tabela após exclusão
+        }
+
+        // Função para editar um produto (simplesmente alerta o SKU neste caso)
+        function editarProduto(sku) {
+            alert(`Editar produto com SKU: ${sku}`);
+            // Aqui você poderia implementar uma página de edição se necessário
+        }
+
+        // Função para filtrar produtos com base no termo de pesquisa
+        function filtrarProdutos() {
+            const termo = document.getElementById('filterInput').value.toLowerCase();
+            const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+            const produtosFiltrados = produtos.filter(produto => {
+                return produto.codigo.toLowerCase().includes(termo) ||
+                       produto.produto.toLowerCase().includes(termo) ||
+                       produto.cor.toLowerCase().includes(termo) ||
+                       produto.espessura.toLowerCase().includes(termo) ||
+                       produto.peso.toLowerCase().includes(termo) ||
+                       produto.sku.toLowerCase().includes(termo);
+            });
+
+            // Atualiza a tabela com os produtos filtrados
+            const corpoTabela = document.getElementById('corpoTabela');
+            corpoTabela.innerHTML = '';
+
+            produtosFiltrados.forEach(produto => {
+                const linha = document.createElement('tr');
+                linha.innerHTML = `
+                    <td>${produto.codigo}</td>
+                    <td>${produto.produto}</td>
+                    <td>${produto.cor}</td>
+                    <td>${produto.espessura}</td>
+                    <td>${produto.peso}</td>
+                    <td>${produto.sku}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editarProduto('${produto.sku}')">Editar</button>
+                        <button onclick="confirmarExclusao('${produto.sku}')">Excluir</button>
+                    </td>
+                `;
+                corpoTabela.appendChild(linha);
+            });
+        }
+
+        // Carregar os produtos ao carregar a página
+        window.onload = carregarProdutos;
+
+        function editarProduto(sku) {
+    // Redireciona para a página de edição, passando o SKU como parâmetro na URL
+    window.location.href = `file:///C:/Users/Matheus%20Pinheiro/Desktop/ud/LISTAGEM/EDITAR%20PROD/editar.html?sku=${sku}`;
+}
+    </script>
+</body>
+</html>

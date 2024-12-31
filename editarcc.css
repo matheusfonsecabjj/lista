@@ -1,0 +1,141 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo para a navegação */
+nav {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
+}
+
+nav .logo img {
+    width: 120px;
+    height: auto;
+}
+
+nav .menu-toggle div {
+    width: 25px;
+    height: 3px;
+    margin: 5px;
+    background-color: white;
+}
+
+nav .menu {
+    display: flex;
+    gap: 20px;
+}
+
+nav .menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+nav .menu a:hover {
+    text-decoration: underline;
+}
+
+nav .menu.active {
+    display: block;
+}
+
+/* Estilos para o formulário de edição */
+h2 {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 28px;
+    color: #333;
+}
+
+form {
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+form input:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+form button:active {
+    background-color: #388e3c;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    nav .menu {
+        display: none;
+    }
+
+    nav .menu.active {
+        display: block;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: #333;
+        padding: 20px;
+        text-align: center;
+    }
+
+    nav .menu a {
+        display: block;
+        margin: 10px 0;
+    }
+
+    form {
+        width: 90%;
+    }
+}
