@@ -6,6 +6,7 @@
     <title>Lista de Produtos</title>
     <link rel="stylesheet" type="text/css" href="listaa.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="logocss.css" media="screen" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Biblioteca para Excel -->
     <script>
         const isLoggedIn = localStorage.getItem("isLoggedIn");
         if (!isLoggedIn) {
@@ -63,6 +64,21 @@
         .dropdown-filter input[type="checkbox"] {
             margin-right: 10px;
         }
+
+        /* Botão para gerar relatório */
+        #generateReportBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #generateReportBtn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -85,13 +101,6 @@
         </div>
     </nav>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.querySelector('nav .menu');
-            menu.classList.toggle('active');
-        }
-    </script>
-
     <h2>Lista de Produtos</h2>
     <table id="tabelaProdutos">
         <thead>
@@ -109,6 +118,9 @@
             <!-- Dados serão carregados aqui -->
         </tbody>
     </table>
+
+    <!-- Botão para gerar o relatório -->
+    <button id="generateReportBtn" onclick="gerarRelatorio()">Gerar Relatório</button>
 
     <div id="dropdown-filters" class="dropdown-filter">
         <input type="text" id="filterSearch" placeholder="Buscar..." onkeyup="filtrarOpcoes()">
@@ -226,10 +238,14 @@
             });
         }
 
-        function selecionarTodos() {
-            const checkboxes = document.querySelectorAll('#filterOptions input[type="checkbox"]');
-            checkboxes.forEach(checkbox => checkbox.checked = true);
-            aplicarFiltro(activeFilterColumn); // Chama a função de filtragem após selecionar todos
+        function gerarRelatorio() {
+            const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+            const ws = XLSX.utils.json_to_sheet(produtos);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Produtos");
+
+            // Gerar e salvar o arquivo Excel
+            XLSX.writeFile(wb, "relatorio_produtos.xlsx");
         }
 
         window.onload = carregarProdutos;
