@@ -16,26 +16,37 @@
         .filter-icon {
             cursor: pointer;
             margin-left: 5px;
-            color: #007BFF;
+            color: white; /* Ícone branco */
         }
+
         .dropdown-filter {
             display: none;
             position: absolute;
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 100;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             text-align: left;
         }
+
+        .dropdown-filter input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
         .dropdown-filter label {
             display: block; /* Exibe cada opção como linha */
             margin-bottom: 5px;
         }
-        .dropdown-filter input {
+
+        .dropdown-filter input[type="checkbox"] {
             margin-right: 10px;
         }
     </style>
@@ -71,12 +82,12 @@
     <table id="tabelaProdutos">
         <thead>
             <tr>
-                <th>Código <span class="filter-icon" onclick="toggleFilter('codigo', event)">🔽</span></th>
-                <th>Produto <span class="filter-icon" onclick="toggleFilter('produto', event)">🔽</span></th>
-                <th>Cor <span class="filter-icon" onclick="toggleFilter('cor', event)">🔽</span></th>
-                <th>Espessura <span class="filter-icon" onclick="toggleFilter('espessura', event)">🔽</span></th>
-                <th>Peso <span class="filter-icon" onclick="toggleFilter('peso', event)">🔽</span></th>
-                <th>SKU <span class="filter-icon" onclick="toggleFilter('sku', event)">🔽</span></th>
+                <th>Código <span class="filter-icon" onclick="toggleFilter('codigo', event)">&#x25BC;</span></th>
+                <th>Produto <span class="filter-icon" onclick="toggleFilter('produto', event)">&#x25BC;</span></th>
+                <th>Cor <span class="filter-icon" onclick="toggleFilter('cor', event)">&#x25BC;</span></th>
+                <th>Espessura <span class="filter-icon" onclick="toggleFilter('espessura', event)">&#x25BC;</span></th>
+                <th>Peso <span class="filter-icon" onclick="toggleFilter('peso', event)">&#x25BC;</span></th>
+                <th>SKU <span class="filter-icon" onclick="toggleFilter('sku', event)">&#x25BC;</span></th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -85,7 +96,10 @@
         </tbody>
     </table>
 
-    <div id="dropdown-filters" class="dropdown-filter"></div>
+    <div id="dropdown-filters" class="dropdown-filter">
+        <input type="text" id="filterSearch" placeholder="Buscar..." onkeyup="filtrarOpcoes()">
+        <div id="filterOptions"></div>
+    </div>
 
     <script>
         let activeFilterColumn = null;
@@ -145,7 +159,8 @@
             const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
             const uniqueValues = [...new Set(produtos.map(produto => produto[column]))];
 
-            dropdown.innerHTML = uniqueValues.map(value => `
+            const filterOptions = document.getElementById('filterOptions');
+            filterOptions.innerHTML = uniqueValues.map(value => `
                 <label>
                     <input type="checkbox" value="${value}" onchange="aplicarFiltro('${column}')"> ${value}
                 </label>
@@ -156,8 +171,18 @@
             dropdown.style.top = `${rect.bottom + window.scrollY}px`;
         }
 
+        function filtrarOpcoes() {
+            const termo = document.getElementById('filterSearch').value.toLowerCase();
+            const labels = document.querySelectorAll('#filterOptions label');
+
+            labels.forEach(label => {
+                const texto = label.textContent.toLowerCase();
+                label.style.display = texto.includes(termo) ? 'block' : 'none';
+            });
+        }
+
         function aplicarFiltro(column) {
-            const checkboxes = document.querySelectorAll('#dropdown-filters input[type="checkbox"]');
+            const checkboxes = document.querySelectorAll('#filterOptions input[type="checkbox"]');
             const valoresFiltrados = Array.from(checkboxes)
                 .filter(checkbox => checkbox.checked)
                 .map(checkbox => checkbox.value);
