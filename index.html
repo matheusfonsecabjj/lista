@@ -65,7 +65,13 @@
             margin-right: 10px;
         }
 
-        /* Botão para gerar relatório */
+        /* Estilo para a área do título e o botão de gerar relatório */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         #generateReportBtn {
             margin-top: 20px;
             padding: 10px 20px;
@@ -101,7 +107,11 @@
         </div>
     </nav>
 
-    <h2>Lista de Produtos</h2>
+    <div class="header-container">
+        <h2>Lista de Produtos</h2>
+        <button id="generateReportBtn" onclick="gerarRelatorio()">Gerar Relatório</button>
+    </div>
+
     <table id="tabelaProdutos">
         <thead>
             <tr>
@@ -118,9 +128,6 @@
             <!-- Dados serão carregados aqui -->
         </tbody>
     </table>
-
-    <!-- Botão para gerar o relatório -->
-    <button id="generateReportBtn" onclick="gerarRelatorio()">Gerar Relatório</button>
 
     <div id="dropdown-filters" class="dropdown-filter">
         <input type="text" id="filterSearch" placeholder="Buscar..." onkeyup="filtrarOpcoes()">
@@ -238,13 +245,17 @@
             });
         }
 
+        function selecionarTodos() {
+            const checkboxes = document.querySelectorAll('#filterOptions input[type="checkbox"]');
+            checkboxes.forEach(checkbox => checkbox.checked = true);
+            aplicarFiltro(activeFilterColumn);  // Aplica o filtro automaticamente
+        }
+
         function gerarRelatorio() {
             const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
             const ws = XLSX.utils.json_to_sheet(produtos);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Produtos");
-
-            // Gerar e salvar o arquivo Excel
             XLSX.writeFile(wb, "relatorio_produtos.xlsx");
         }
 
