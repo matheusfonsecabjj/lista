@@ -6,7 +6,15 @@
     <title>Lista de Produtos</title>
     <link rel="stylesheet" type="text/css" href="listaa.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="logocss.css" media="screen" />
-    
+    <script>
+        // Verificar se o usuário está logado
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        // Se não estiver logado, redireciona para a página de login
+        if (!isLoggedIn) {
+            window.location.href = "https://matheusfonsecabjj.github.io/login/"; // Redireciona para o login
+        }
+    </script>
 </head>
 
 <body>
