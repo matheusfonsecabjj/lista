@@ -229,6 +229,7 @@
         function selecionarTodos() {
             const checkboxes = document.querySelectorAll('#filterOptions input[type="checkbox"]');
             checkboxes.forEach(checkbox => checkbox.checked = true);
+            aplicarFiltro(activeFilterColumn); // Chama a função de filtragem após selecionar todos
         }
 
         window.onload = carregarProdutos;
