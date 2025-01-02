@@ -7,20 +7,41 @@
     <link rel="stylesheet" type="text/css" href="listaa.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="logocss.css" media="screen" />
     <script>
-        // Verificar se o usuário está logado
         const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-        // Se não estiver logado, redireciona para a página de login
         if (!isLoggedIn) {
-            window.location.href = "https://matheusfonsecabjj.github.io/login/"; // Redireciona para o login
+            window.location.href = "https://matheusfonsecabjj.github.io/login/";
         }
     </script>
+    <style>
+        .filter-icon {
+            cursor: pointer;
+            margin-left: 5px;
+            color: #007BFF;
+        }
+        .dropdown-filter {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        .dropdown-filter input {
+            margin: 5px 0;
+        }
+        .filter-container {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 
 <body>
     <nav>
         <div class="logo">
-            <img src="logo.png" alt="Logo"> <!-- Substitua 'sua-imagem.png' pelo caminho da sua imagem -->
+            <img src="logo.png" alt="Logo">
         </div>
         <div class="menu-toggle" onclick="toggleMenu()">
             <div></div>
@@ -43,40 +64,16 @@
         }
     </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<body>
-    <div class="filter-container">
-        <label for="filterInput">Filtrar produtos: </label>
-        <input type="text" id="filterInput" placeholder="Digite para filtrar..." onkeyup="filtrarProdutos()">
-    </div>
-    
     <h2>Lista de Produtos</h2>
     <table id="tabelaProdutos">
         <thead>
             <tr>
-                <th>Código</th>
-                <th>Produto</th>
-                <th>Cor</th>
-                <th>Espessura</th>
-                <th>Peso</th>
-                <th>SKU</th>
+                <th>Código <span class="filter-icon" onclick="toggleFilter('codigo')">🔽</span></th>
+                <th>Produto <span class="filter-icon" onclick="toggleFilter('produto')">🔽</span></th>
+                <th>Cor <span class="filter-icon" onclick="toggleFilter('cor')">🔽</span></th>
+                <th>Espessura <span class="filter-icon" onclick="toggleFilter('espessura')">🔽</span></th>
+                <th>Peso <span class="filter-icon" onclick="toggleFilter('peso')">🔽</span></th>
+                <th>SKU <span class="filter-icon" onclick="toggleFilter('sku')">🔽</span></th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -85,8 +82,11 @@
         </tbody>
     </table>
 
+    <div id="dropdown-filters" class="dropdown-filter"></div>
+
     <script>
-        // Função para carregar os produtos da localStorage e exibi-los na tabela
+        let activeFilterColumn = null;
+
         function carregarProdutos() {
             const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
             const corpoTabela = document.getElementById('corpoTabela');
@@ -110,7 +110,6 @@
             });
         }
 
-        // Função para excluir um produto após confirmação
         function confirmarExclusao(sku) {
             const confirmacao = confirm('Tem certeza que deseja excluir este produto?');
             if (confirmacao) {
@@ -118,34 +117,47 @@
             }
         }
 
-        // Função para excluir um produto
         function excluirProduto(sku) {
             let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
             produtos = produtos.filter(produto => produto.sku !== sku);
             localStorage.setItem('produtos', JSON.stringify(produtos));
-            carregarProdutos(); // Atualiza a tabela após exclusão
+            carregarProdutos();
         }
 
-        // Função para editar um produto (simplesmente alerta o SKU neste caso)
         function editarProduto(sku) {
-            alert(`Editar produto com SKU: ${sku}`);
-            // Aqui você poderia implementar uma página de edição se necessário
+            window.location.href = `https://matheusfonsecabjj.github.io/editar/?sku=${sku}`;
         }
 
-        // Função para filtrar produtos com base no termo de pesquisa
-        function filtrarProdutos() {
-            const termo = document.getElementById('filterInput').value.toLowerCase();
-            const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
-            const produtosFiltrados = produtos.filter(produto => {
-                return produto.codigo.toLowerCase().includes(termo) ||
-                       produto.produto.toLowerCase().includes(termo) ||
-                       produto.cor.toLowerCase().includes(termo) ||
-                       produto.espessura.toLowerCase().includes(termo) ||
-                       produto.peso.toLowerCase().includes(termo) ||
-                       produto.sku.toLowerCase().includes(termo);
-            });
+        function toggleFilter(column) {
+            const dropdown = document.getElementById('dropdown-filters');
+            if (activeFilterColumn === column) {
+                dropdown.style.display = 'none';
+                activeFilterColumn = null;
+                return;
+            }
+            activeFilterColumn = column;
 
-            // Atualiza a tabela com os produtos filtrados
+            const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+            const uniqueValues = [...new Set(produtos.map(produto => produto[column]))];
+
+            dropdown.innerHTML = uniqueValues.map(value => `
+                <label>
+                    <input type="checkbox" value="${value}" onchange="aplicarFiltro('${column}')"> ${value}
+                </label>
+            `).join('');
+
+            dropdown.style.display = 'block';
+        }
+
+        function aplicarFiltro(column) {
+            const checkboxes = document.querySelectorAll('#dropdown-filters input[type="checkbox"]');
+            const valoresFiltrados = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+            const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+            const produtosFiltrados = produtos.filter(produto => valoresFiltrados.includes(produto[column]));
+
             const corpoTabela = document.getElementById('corpoTabela');
             corpoTabela.innerHTML = '';
 
@@ -167,13 +179,7 @@
             });
         }
 
-        // Carregar os produtos ao carregar a página
         window.onload = carregarProdutos;
-
-        function editarProduto(sku) {
-    // Redireciona para a página de edição, passando o SKU como parâmetro na URL
-  window.location.href = `https://matheusfonsecabjj.github.io/editar/?sku=${sku}`;
-}
     </script>
 </body>
 </html>
