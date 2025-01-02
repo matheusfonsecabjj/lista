@@ -34,11 +34,25 @@
         }
 
         .dropdown-filter input[type="text"] {
-            width: calc(100% - 20px);
+            width: calc(70% - 10px);
             padding: 5px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 3px;
+        }
+
+        .dropdown-filter button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .dropdown-filter button:hover {
+            background-color: #0056b3;
         }
 
         .dropdown-filter label {
@@ -98,6 +112,7 @@
 
     <div id="dropdown-filters" class="dropdown-filter">
         <input type="text" id="filterSearch" placeholder="Buscar..." onkeyup="filtrarOpcoes()">
+        <button onclick="selecionarTodos()">Selecionar Todos</button>
         <div id="filterOptions"></div>
     </div>
 
@@ -209,6 +224,11 @@
                 `;
                 corpoTabela.appendChild(linha);
             });
+        }
+
+        function selecionarTodos() {
+            const checkboxes = document.querySelectorAll('#filterOptions input[type="checkbox"]');
+            checkboxes.forEach(checkbox => checkbox.checked = true);
         }
 
         window.onload = carregarProdutos;
