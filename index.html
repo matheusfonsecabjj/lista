@@ -261,48 +261,7 @@
 
         window.onload = carregarProdutos;
 
-const { Client } = require('pg');
 
-const client = new Client({
-    host: 'perkily-hospitable-willet.data-1.use1.tembo.io',
-    port: 5432,
-    database: 'loja_db',
-    user: 'postgres',
-    password: 'KUpHTkxsFYcuuM7H'
-});
-
-client.connect()
-    .then(() => {
-        console.log('Conectado ao banco de dados!');
-    })
-    .catch(err => {
-        console.error('Erro ao conectar', err.stack);
-    });
-
-module.exports = client;
-
-
-        const express = require('express');
-const client = require('./db');  // Conexão com o banco
-
-const app = express();
-const port = 3000;
-
-app.get('/', (req, res) => {
-    client.query('SELECT * FROM produtos', (err, result) => {
-        if (err) {
-            res.status(500).send('Erro ao consultar dados');
-        } else {
-            res.json(result.rows);  // Retorna os dados em formato JSON
-        }
-    });
-});
-
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
-});
-
-        
 
 
         
