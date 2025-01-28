@@ -1,0 +1,112 @@
+/* Corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navegação */
+nav {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative; /* Necessário para o menu dropdown no mobile */
+}
+
+nav .logo img {
+    height: 60px; /* Ajuste o tamanho da imagem conforme necessário */
+}
+
+nav .menu {
+    display: flex;
+    gap: 15px;
+}
+
+nav .menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav .menu a:hover {
+    background-color: #555;
+}
+
+/* Menu Toggle (hamburger) */
+nav .menu-toggle {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+nav .menu-toggle div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+    /* Menu no mobile */
+    nav .menu {
+        display: none;
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 60px; /* Ajuste a posição do menu em relação ao topo */
+        left: 0;
+        width: 100%;
+        padding: 0;
+    }
+
+    nav .menu a {
+        padding: 15px;
+        border-bottom: 1px solid #555;
+        text-align: center;
+    }
+
+    nav .menu a:hover {
+        background-color: #444; /* Efeito hover para menu mobile */
+    }
+
+    /* Menu Toggle visível em telas pequenas */
+    nav .menu-toggle {
+        display: flex;
+    }
+
+    /* Menu visível quando a classe "active" for adicionada */
+    nav .menu.active {
+        display: flex;
+    }
+}
+
+/* Título principal */
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Container de mensagens */
+.message-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 30px auto;
+    padding: 20px;
+    background: #eaf2f8;
+    border: 1px solid #d6eaf8;
+    border-radius: 10px;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    font-size: 1.2em;
+    color: #34495e;
+}

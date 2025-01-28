@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+    <link rel="stylesheet" type="text/css" href="listaa.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="logo.css" media="screen" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Biblioteca para Excel -->
+    <script src="lista.js" defer></script>
+    <style>
+        /* Estilo específico da página */
+        .filter-icon {
+            cursor: pointer;
+            margin-left: 5px;
+            color: white;
+        }
+        .dropdown-filter {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .dropdown-filter input[type="text"] {
+            width: calc(70% - 10px);
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .dropdown-filter button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .dropdown-filter button:hover {
+            background-color: #0056b3;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #generateReportBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #generateReportBtn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="menu">
+            <a href="https://matheusfonsecabjj.github.io/home/">Home</a>
+            <a href="https://matheusfonsecabjj.github.io/entrada/">Entrada</a>
+            <a href="https://matheusfonsecabjj.github.io/saida/">Saída</a>
+            <a href="https://matheusfonsecabjj.github.io/lista/">Listagem</a>
+            <a href="https://matheusfonsecabjj.github.io/mapa/">Mapeamento</a>
+            <a href="https://matheusfonsecabjj.github.io/pedidos/">Espelho</a>
+        </div>
+    </nav>
+    <div class="header-container">
+        <h2>Lista de Produtos</h2>
+        <button id="generateReportBtn" onclick="gerarRelatorio()">Gerar Relatório</button>
+    </div>
+    <table id="tabelaProdutos">
+        <thead>
+            <tr>
+                <th>Código <span class="filter-icon" onclick="toggleFilter('codigo', event)">&#x25BC;</span></th>
+                <th>Produto <span class="filter-icon" onclick="toggleFilter('produto', event)">&#x25BC;</span></th>
+                <th>Cor <span class="filter-icon" onclick="toggleFilter('cor', event)">&#x25BC;</span></th>
+                <th>Espessura <span class="filter-icon" onclick="toggleFilter('espessura', event)">&#x25BC;</span></th>
+                <th>Peso <span class="filter-icon" onclick="toggleFilter('peso', event)">&#x25BC;</span></th>
+                <th>Placas <span class="filter-icon" onclick="toggleFilter('placas', event)">&#x25BC;</span></th>
+                <th>SKU <span class="filter-icon" onclick="toggleFilter('sku', event)">&#x25BC;</span></th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="corpoTabela">
+            <!-- Dados serão carregados aqui -->
+        </tbody>
+    </table>
+    <div id="dropdown-filters" class="dropdown-filter">
+        <input type="text" id="filterSearch" placeholder="Buscar..." onkeyup="filtrarOpcoes()">
+        <button onclick="selecionarTodos()">Selecionar Todos</button>
+        <div id="filterOptions"></div>
+    </div>
+</body>
+</html>
